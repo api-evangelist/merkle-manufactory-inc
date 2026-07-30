@@ -1,23 +1,112 @@
 aid: merkle-manufactory-inc
 name: Merkle Manufactory Inc.
-description: Merkle Manufactory Inc. is a company surfaced as a portfolio company of a16z and added to
-  the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  Merkle Manufactory Inc. is the company that builds Farcaster, a sufficiently
+  decentralized social network, and Snapchain, the blockchain-like peer-to-peer
+  network that stores and syncs Farcaster's social data. Its developer surface
+  is open and protocol-based rather than a single hosted product API: Snapchain
+  nodes serve an HTTP API (port 3381, /v1) and a gRPC API (port 3383) for
+  reading casts, reactions, links, user data, verifications and on-chain events
+  and for submitting signed messages; Mini Apps (formerly Frames v2) run inside
+  the Farcaster feed; and Sign In with Farcaster (SIWF) plus AuthKit provide
+  identity for third-party apps. The stack is fully open source under the
+  farcasterxyz GitHub organization. Backed by a16z.
 url: https://raw.githubusercontent.com/api-evangelist/merkle-manufactory-inc/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://docs.farcaster.xyz/og-image.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - a16z
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: enriched
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
-apis: []
+- Social
+- Decentralized Social
+- Protocol
+- Blockchain
+- Web3
+- Developer Platform
+- Farcaster
+apis:
+- name: Snapchain HTTP API
+  description: >-
+    The read/write REST interface a Snapchain node serves on port 3381 under the
+    /v1 path. Read endpoints (casts, reactions, links, user data, verifications,
+    fids, username proofs, storage limits, on-chain events, info, events) are
+    unauthenticated; writes are performed by submitting protobuf-encoded,
+    Ed25519-signed Farcaster messages to /v1/submitMessage. Snapchain is
+    self-hosted node software (a drop-in replacement for Hubble); the default
+    documented base address is a local node.
+  humanURL: https://snapchain.farcaster.xyz/reference/httpapi/httpapi
+  baseURL: http://127.0.0.1:3381/v1
+  tags:
+  - Social
+  - Decentralized Social
+  - Protocol
+  properties:
+  - type: Documentation
+    url: https://snapchain.farcaster.xyz/
+  - type: APIReference
+    url: https://snapchain.farcaster.xyz/reference/httpapi/httpapi
+  - type: GettingStarted
+    url: https://snapchain.farcaster.xyz/getting-started
+  - type: Protobuf
+    url: grpc/merkle-manufactory-inc-rpc.proto
+    name: Snapchain gRPC API (rpc.proto)
+  - type: Protobuf
+    url: grpc/merkle-manufactory-inc-message.proto
+    name: Farcaster Message model (message.proto)
+common:
+- type: DomainSecurity
+  url: security/merkle-manufactory-inc-domain-security.yml
+- type: DeveloperPortal
+  url: https://docs.farcaster.xyz/
+- type: Documentation
+  url: https://docs.farcaster.xyz/
+- type: APIReference
+  url: https://snapchain.farcaster.xyz/reference/httpapi/httpapi
+- type: GettingStarted
+  url: https://snapchain.farcaster.xyz/getting-started
+- type: GitHubOrganization
+  url: https://github.com/farcasterxyz
+- type: SignUp
+  url: https://farcaster.xyz/
+- type: Support
+  url: https://farcaster.xyz/~/channel/fc-devs
+- type: Authentication
+  url: authentication/merkle-manufactory-inc-authentication.yml
+- type: Conventions
+  url: conventions/merkle-manufactory-inc-conventions.yml
+- type: Idempotency
+  url: conventions/merkle-manufactory-inc-conventions.yml
+- type: Protobuf
+  url: grpc/merkle-manufactory-inc-rpc.proto
+  name: Snapchain gRPC API definitions
+- type: LLMsTxt
+  url: llms/merkle-manufactory-inc-llms.txt
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+x-enrichment:
+  date: '2026-07-20'
+  status: enriched
+  artifacts_added: 12
+  pass: local-v1
