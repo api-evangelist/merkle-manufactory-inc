@@ -1,0 +1,46 @@
+generated: '2026-07-20'
+method: searched
+source: https://snapchain.farcaster.xyz/reference/httpapi/message
+description: >-
+  Authentication / authorization model for the Farcaster / Snapchain developer
+  surface. Derived from the Snapchain HTTP API reference and the Farcaster
+  message protobuf (signature scheme, signer, key registry). There are no HTTP
+  API keys, bearer tokens, or OAuth flows on the node HTTP API: reads are open
+  and writes are authorized by cryptographic message signatures.
+summary:
+  types:
+    - none
+    - signed-message
+  api_key_in: []
+  oauth2_flows: []
+schemes:
+  - name: PublicRead
+    type: none
+    applies_to: All GET endpoints of the Snapchain HTTP API (/v1/*)
+    detail: >-
+      Read endpoints on a Snapchain node are unauthenticated. Clients query a
+      public node directly with no credential.
+  - name: SignedMessageWrite
+    type: message-signature
+    applies_to: POST /v1/submitMessage
+    signature_scheme: SIGNATURE_SCHEME_ED25519
+    detail: >-
+      Writes are authorized by an Ed25519 signature over the message hash,
+      produced by an account key (signer) that the user has registered on-chain
+      via the Farcaster Key Registry. The submitted protobuf Message carries the
+      fid, signer public key, hash, and signature; the node verifies the signer
+      is an authorized key for that fid before merging.
+    keys_registered_via: Farcaster Key Registry (on-chain, Optimism)
+identity:
+  siwf:
+    name: Sign In with Farcaster (SIWF)
+    docs: https://docs.farcaster.xyz/developers/siwf
+    detail: >-
+      Application-level authentication standard (an EIP-4361 Sign-In-with-
+      Ethereum profile) that lets third-party apps authenticate a Farcaster user
+      and read their identity. Implemented client-side via AuthKit.
+    authkit: https://docs.farcaster.xyz/auth-kit/installation
+notes: >-
+  This provider publishes no OpenAPI, so this profile is captured from the
+  human-readable HTTP API reference and the protobuf definitions in
+  grpc/ rather than derived from securitySchemes.

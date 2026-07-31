@@ -1,0 +1,88 @@
+generated: '2026-07-20'
+method: searched
+source: https://snapchain.farcaster.xyz/reference/httpapi/httpapi
+description: >-
+  Cross-cutting request/response conventions for the Snapchain HTTP API (the
+  read/write REST interface a Snapchain node serves on port 3381 under the /v1
+  path). Captured from the Farcaster/Snapchain HTTP API reference and the
+  Farcaster message protobuf model.
+api: Snapchain HTTP API
+base_path: /v1
+default_port: 3381
+authentication:
+  reads: none
+  reads_note: >-
+    GET endpoints on a Snapchain node are unauthenticated; any client can query
+    a public node.
+  writes: signed-message
+  writes_note: >-
+    Writes are performed by submitting a protobuf-encoded, Ed25519-signed
+    Farcaster Message to POST /v1/submitMessage with
+    Content-Type: application/octet-stream. Authorization is carried inside the
+    message (fid + signer + signature), not via an HTTP auth header.
+  see: authentication/merkle-manufactory-inc-authentication.yml
+pagination:
+  style: cursor
+  request_params:
+    - name: pageSize
+      in: query
+      description: Maximum number of results to return in a page.
+    - name: pageToken
+      in: query
+      description: Opaque cursor returned by the previous response; omit for the first page.
+    - name: reverse
+      in: query
+      description: When true, returns results in reverse (newest-first) order.
+  response_fields:
+    - name: nextPageToken
+      description: >-
+        Opaque cursor for the next page; an empty string indicates there are no
+        further pages.
+  note: >-
+    List endpoints (castsByFid, reactionsByFid, linksByFid, etc.) return a
+    { messages: [...], nextPageToken } envelope.
+idempotency:
+  supported: true
+  mechanism: content-addressed
+  detail: >-
+    Every Farcaster Message is identified by the hash of its MessageData.
+    Submitting the same signed message more than once is a no-op: the node
+    merges it into its CRDT store by hash, so retries and duplicate submissions
+    are idempotent. Conflicts between messages of the same type for the same fid
+    are resolved deterministically (timestamp, then hash tiebreak), so a given
+    signed message always converges to the same network state.
+  header: none
+  key_field: hash
+timestamps:
+  scheme: farcaster-epoch
+  detail: >-
+    Message timestamps are seconds since the Farcaster epoch (2021-01-01
+    00:00:00 UTC), not Unix epoch.
+error_envelope:
+  format: json
+  fields:
+    - errCode
+    - presentable
+    - name
+    - message
+    - details
+  note: >-
+    Errors return a JSON body with an errCode string (e.g. bad_request,
+    not_found) and a human-readable message.
+  see: errors/
+versioning:
+  scheme: uri-path
+  current: v1
+  note: >-
+    The HTTP API is served under /v1. Protocol-level changes are governed
+    on-chain and through the Farcaster protocol repository rather than through
+    dated API versions.
+rate_limiting:
+  note: >-
+    Rate limiting is a property of the individual node / gateway operator rather
+    than a Merkle-hosted contract; public gateways (e.g. managed providers)
+    apply their own limits.
+related:
+  authentication: authentication/merkle-manufactory-inc-authentication.yml
+  grpc: grpc/merkle-manufactory-inc-rpc.proto
+  llms: llms/merkle-manufactory-inc-llms.txt
