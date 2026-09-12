@@ -84,6 +84,8 @@ apis:
     url: grpc/merkle-manufactory-inc-message.proto
     name: Farcaster Message model (message.proto)
 common:
+- type: Website
+  url: https://www.farcaster.xyz/
 - type: DomainSecurity
   url: security/merkle-manufactory-inc-domain-security.yml
 - type: DeveloperPortal
